@@ -1,0 +1,1825 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z OUTDOOR - Plataforma de Investimentos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066cc;
+            --secondary: #00d4ff;
+            --dark: #0a1628;
+            --darker: #070f1a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #00c853;
+            --warning: #ffd600;
+            --danger: #ff1744;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary); }
+            50% { box-shadow: 0 0 20px var(--secondary), 0 0 30px var(--secondary); }
+        }
+
+        .animate-fade { animation: fadeIn 0.6s ease-out; }
+        .animate-slide { animation: slideIn 0.4s ease-out; }
+
+        /* Layout Principal */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .header-title h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-title p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Cards Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-icon.blue { background: rgba(0,102,204,0.2); color: var(--primary); }
+        .stat-icon.green { background: rgba(0,200,83,0.2); color: var(--success); }
+        .stat-icon.yellow { background: rgba(255,214,0,0.2); color: var(--warning); }
+        .stat-icon.red { background: rgba(255,23,68,0.2); color: var(--danger); }
+
+        .stat-trend {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: rgba(0,200,83,0.1);
+            color: var(--success);
+        }
+
+        .stat-trend.down {
+            background: rgba(255,23,68,0.1);
+            color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Seções */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,102,204,0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Tabelas */
+        .data-table {
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            padding: 1.25rem;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .table-row:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status.active {
+            background: rgba(0,200,83,0.15);
+            color: var(--success);
+        }
+
+        .status.pending {
+            background: rgba(255,214,0,0.15);
+            color: var(--warning);
+        }
+
+        .status.inactive {
+            background: rgba(255,23,68,0.15);
+            color: var(--danger);
+        }
+
+        /* Cards de Outdoors */
+        .outdoors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .outdoor-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .outdoor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .outdoor-image {
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .outdoor-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .outdoor-badge.available {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .outdoor-badge.rented {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .outdoor-content {
+            padding: 1.5rem;
+        }
+
+        .outdoor-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .outdoor-location {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .outdoor-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .outdoor-stat {
+            text-align: center;
+        }
+
+        .outdoor-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .outdoor-stat-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+        }
+
+        /* Formulários */
+        .form-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--darker);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        /* Contrato Preview */
+        .contract-preview {
+            background: #fff;
+            color: #333;
+            padding: 3rem;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.8;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .contract-preview h1 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .contract-preview h2 {
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .contract-preview p {
+            margin-bottom: 0.5rem;
+            text-align: justify;
+        }
+
+        .contract-field {
+            background: #e3f2fd;
+            padding: 0 4px;
+            border-bottom: 1px solid #2196f3;
+            font-weight: bold;
+            color: #1565c0;
+        }
+
+        /* Login Screen */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,102,204,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .login-box {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .login-tab.active {
+            color: #fff;
+        }
+
+        .login-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* Gráficos */
+        .chart-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            height: 400px;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.2rem;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utilitários */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .w-full { width: 100%; }
+
+        /* Editable fields highlight */
+        [contenteditable="true"] {
+            border: 2px dashed var(--secondary);
+            padding: 2px 4px;
+            border-radius: 4px;
+            background: rgba(0,212,255,0.1);
+        }
+
+        [contenteditable="true"]:hover {
+            background: rgba(0,212,255,0.2);
+        }
+
+        .edit-hint {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Tela de Login -->
+<div id="loginScreen" class="login-container">
+    <div class="login-box animate-fade">
+        <div class="login-logo">
+            <i class="fas fa-bullhorn"></i>
+            <h2>Z OUTDOOR</h2>
+            <p>Plataforma de Investimentos</p>
+        </div>
+        
+        <div class="login-tabs">
+            <button class="login-tab active" onclick="switchLoginTab('admin')">
+                <i class="fas fa-user-shield"></i> Administrador
+            </button>
+            <button class="login-tab" onclick="switchLoginTab('investor')">
+                <i class="fas fa-user-tie"></i> Investidor
+            </button>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label class="form-label">Email / CPF</label>
+                <input type="text" class="form-input" id="loginEmail" placeholder="Digite seu email ou CPF" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Senha</label>
+                <input type="password" class="form-input" id="loginPassword" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="justify-content: center;">
+                <i class="fas fa-sign-in-alt"></i> Acessar Plataforma
+            </button>
+        </form>
+
+        <div class="text-center mt-2" style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+            <p>Demo: Admin (admin@zoutdoor.com / 123456)</p>
+            <p>Investidor (cpf: 123.456.789-00 / 123456)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Principal -->
+<div id="mainApp" class="container hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Z OUTDOOR</h1>
+                <span>Investimentos</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav-menu" id="adminMenu">
+                <li class="nav-item">
+                    <button class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('outdoors')">
+                        <i class="fas fa-ad"></i>
+                        <span>Meus Outdoors</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('investors')">
+                        <i class="fas fa-users"></i>
+                        <span>Investidores</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('contracts')">
+                        <i class="fas fa-file-contract"></i>
+                        <span>Contratos</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('payments')">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Rendimentos</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('config')">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </button>
+                </li>
+            </ul>
+
+            <ul class="nav-menu hidden" id="investorMenu">
+                <li class="nav-item">
+                    <button class="nav-link active" onclick="showSection('invDashboard')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Meu Painel</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('invInvestments')">
+                        <i class="fas fa-wallet"></i>
+                        <span>Meus Investimentos</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('invContracts')">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Meus Contratos</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showSection('invStatements')">
+                        <i class="fas fa-receipt"></i>
+                        <span>Extratos</span>
+                    </button>
+                </li>
+            </ul>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <button class="nav-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h2 id="pageTitle">Dashboard Administrativo</h2>
+                <p id="pageSubtitle">Visão geral do negócio</p>
+            </div>
+            <div class="user-menu">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div>
+                        <div id="userName" style="font-weight: 600;">Admin</div>
+                        <div id="userRole" style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">Administrador</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SEÇÕES ADMIN -->
+
+        <!-- Dashboard Admin -->
+        <section id="dashboard" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-ad"></i>
+                        </div>
+                        <span class="stat-trend"><i class="fas fa-arrow-up"></i> 12%</span>
+                    </div>
+                    <div class="stat-value" id="totalOutdoors">8</div>
+                    <div class="stat-label">Total de Outdoors</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon green">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="stat-trend"><i class="fas fa-arrow-up"></i> 5%</span>
+                    </div>
+                    <div class="stat-value" id="totalInvestors">24</div>
+                    <div class="stat-label">Investidores Ativos</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon yellow">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <span class="stat-trend down"><i class="fas fa-arrow-down"></i> 2%</span>
+                    </div>
+                    <div class="stat-value">R$ 12.5k</div>
+                    <div class="stat-label">Rendimentos do Mês</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon red">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <span class="stat-trend"><i class="fas fa-arrow-up"></i> 8%</span>
+                    </div>
+                    <div class="stat-value">70%</div>
+                    <div class="stat-label">Taxa Média de Ocupação</div>
+                </div>
+            </div>
+
+            <div class="chart-container" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Evolução dos Rendimentos</h3>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-area" style="font-size: 3rem; margin-right: 1rem;"></i>
+                    Gráfico de rendimentos mensais (Integração com Chart.js recomendada)
+                </div>
+            </div>
+
+            <div class="data-table">
+                <div style="padding: 1.5rem; border-bottom: 1px solid var(--border);">
+                    <h3>Últimos Investidores</h3>
+                </div>
+                <div class="table-header">
+                    <div>Nome</div>
+                    <div>Cotas</div>
+                    <div>Investimento</div>
+                    <div>Data</div>
+                    <div>Status</div>
+                </div>
+                <div id="recentInvestorsList">
+                    <div class="table-row">
+                        <div><strong>João Silva</strong></div>
+                        <div>4 cotas</div>
+                        <div>R$ 200,00</div>
+                        <div>27/02/2026</div>
+                        <div><span class="status active">Ativo</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div><strong>Maria Santos</strong></div>
+                        <div>10 cotas</div>
+                        <div>R$ 500,00</div>
+                        <div>25/02/2026</div>
+                        <div><span class="status active">Ativo</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Outdoors -->
+        <section id="outdoors" class="section">
+            <div class="section-header">
+                <div>
+                    <h2>Gerenciar Outdoors</h2>
+                    <p style="color: rgba(255,255,255,0.6);">Cadastre e gerencie seus painéis</p>
+                </div>
+                <button class="btn btn-primary" onclick="openOutdoorModal()">
+                    <i class="fas fa-plus"></i> Novo Outdoor
+                </button>
+            </div>
+
+            <div class="outdoors-grid" id="outdoorsGrid">
+                <!-- Outdoor 1 -->
+                <div class="outdoor-card">
+                    <div class="outdoor-image">
+                        <i class="fas fa-ad"></i>
+                        <span class="outdoor-badge rented">Alugado</span>
+                    </div>
+                    <div class="outdoor-content">
+                        <h3 class="outdoor-title">Outdoor Centro - Av. Brasil</h3>
+                        <div class="outdoor-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Av. Brasil, 1500 - Centro
+                        </div>
+                        <div class="outdoor-stats">
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">20</div>
+                                <div class="outdoor-stat-label">Cotas</div>
+                            </div>
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">R$50</div>
+                                <div class="outdoor-stat-label">Valor Cota</div>
+                            </div>
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">R$350</div>
+                                <div class="outdoor-stat-label">Renda/Mês</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 0.5rem;" onclick="editOutdoor(1)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-primary" style="flex: 1; padding: 0.5rem;" onclick="viewOutdoor(1)">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outdoor 2 -->
+                <div class="outdoor-card">
+                    <div class="outdoor-image">
+                        <i class="fas fa-ad"></i>
+                        <span class="outdoor-badge available">Disponível</span>
+                    </div>
+                    <div class="outdoor-content">
+                        <h3 class="outdoor-title">Outdoor Shopping</h3>
+                        <div class="outdoor-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Rodovia SP-340, Km 123
+                        </div>
+                        <div class="outdoor-stats">
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">10</div>
+                                <div class="outdoor-stat-label">Cotas</div>
+                            </div>
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">R$50</div>
+                                <div class="outdoor-stat-label">Valor Cota</div>
+                            </div>
+                            <div class="outdoor-stat">
+                                <div class="outdoor-stat-value">R$0</div>
+                                <div class="outdoor-stat-label">Renda/Mês</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 0.5rem;" onclick="editOutdoor(2)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-primary" style="flex: 1; padding: 0.5rem;" onclick="viewOutdoor(2)">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investidores -->
+        <section id="investors" class="section">
+            <div class="section-header">
+                <div>
+                    <h2>Cadastro de Investidores</h2>
+                    <p style="color: rgba(255,255,255,0.6);">Gerencie seus investidores e cotas</p>
+                </div>
+                <button class="btn btn-primary" onclick="openInvestorModal()">
+                    <i class="fas fa-user-plus"></i> Novo Investidor
+                </button>
+            </div>
+
+            <div class="data-table">
+                <div class="table-header">
+                    <div>Investidor</div>
+                    <div>CPF</div>
+                    <div>Cotas</div>
+                    <div>Total Investido</div>
+                    <div>Outdoor</div>
+                    <div>Ações</div>
+                </div>
+                <div id="investorsTable">
+                    <div class="table-row">
+                        <div>
+                            <strong>João da Silva</strong><br>
+                            <small style="color: rgba(255,255,255,0.6);">joao@email.com</small>
+                        </div>
+                        <div>123.456.789-00</div>
+                        <div>4 cotas</div>
+                        <div>R$ 200,00</div>
+                        <div>Av. Brasil</div>
+                        <div>
+                            <button class="btn btn-secondary" style="padding: 0.5rem 1rem;" onclick="generateContract('123.456.789-00')">
+                                <i class="fas fa-file-contract"></i> Contrato
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contratos -->
+        <section id="contracts" class="section">
+            <div class="section-header">
+                <div>
+                    <h2>Gerenciamento de Contratos</h2>
+                    <p style="color: rgba(255,255,255,0.6);">Gere e visualize contratos de SCP</p>
+                </div>
+            </div>
+
+            <div class="form-container" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-magic"></i> Gerar Novo Contrato</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Selecionar Investidor</label>
+                        <select class="form-select" id="contractInvestor" onchange="loadInvestorData()">
+                            <option value="">Escolha um investidor...</option>
+                            <option value="1">João da Silva (123.456.789-00)</option>
+                            <option value="2">Maria Santos (987.654.321-00)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Outdoor</label>
+                        <select class="form-select" id="contractOutdoor">
+                            <option value="1">Av. Brasil - Centro</option>
+                            <option value="2">Rodovia SP-340</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Número de Cotas</label>
+                        <input type="number" class="form-input" id="contractCotas" value="1" min="1" onchange="calculateInvestment()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valor Total</label>
+                        <input type="text" class="form-input" id="contractValue" value="R$ 50,00" readonly style="background: rgba(0,0,0,0.3);">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Data do Contrato</label>
+                    <input type="date" class="form-input" id="contractDate">
+                </div>
+
+                <button class="btn btn-primary" onclick="previewContract()">
+                    <i class="fas fa-eye"></i> Visualizar Contrato
+                </button>
+                <button class="btn btn-secondary" onclick="printContract()">
+                    <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                </button>
+            </div>
+
+            <div class="edit-hint">
+                <i class="fas fa-info-circle"></i> Dica: No preview do contrato, você pode clicar nos campos destacados em azul para editar manualmente se necessário.
+            </div>
+        </section>
+
+        <!-- Configurações -->
+        <section id="config" class="section">
+            <div class="section-header">
+                <h2>Configurações do Sistema</h2>
+            </div>
+
+            <div class="form-container">
+                <h3 style="margin-bottom: 1.5rem;">Dados da Empresa (Scotista)</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Razão Social</label>
+                        <input type="text" class="form-input" id="configCompanyName" value="Z OUTDOOR LTDA">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CNPJ</label>
+                        <input type="text" class="form-input" id="configCNPJ" value="12.345.678/0001-90">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Responsável</label>
+                        <input type="text" class="form-input" id="configOwnerName" value="Carlos Eduardo Mendes">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CPF do Responsável</label>
+                        <input type="text" class="form-input" id="configOwnerCPF" value="111.222.333-44">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Endereço Completo</label>
+                    <input type="text" class="form-input" id="configAddress" value="Rua das Palmeiras, 123 - Centro, Araraquara/SP">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Chave PIX</label>
+                        <input type="text" class="form-input" id="configPIX" value="12.345.678/0001-90">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dados Bancários</label>
+                        <input type="text" class="form-input" id="configBank" value="Banco do Brasil - Ag 1234-5 / CC 12345-6">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveConfig()">
+                    <i class="fas fa-save"></i> Salvar Configurações
+                </button>
+            </div>
+        </section>
+
+        <!-- SEÇÕES INVESTIDOR -->
+
+        <!-- Dashboard Investidor -->
+        <section id="invDashboard" class="section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">R$ 500,00</div>
+                    <div class="stat-label">Total Investido</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon green">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">R$ 245,00</div>
+                    <div class="stat-label">Rendimentos Acumulados</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon yellow">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">49%</div>
+                    <div class="stat-label">Retorno sobre Investimento</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon red">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">14</div>
+                    <div class="stat-label">Meses Restantes</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem;">Evolução dos seus Rendimentos</h3>
+                <div class="chart-placeholder">
+                    Gráfico de evolução do investimento
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal de Contrato -->
+        <div id="contractModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Preview do Contrato SCP</h2>
+                    <button class="modal-close" onclick="closeContractModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="edit-hint mb-2">
+                        <i class="fas fa-mouse-pointer"></i> Clique em qualquer campo destacado em azul para editar diretamente no contrato
+                    </div>
+                    <div id="contractContent" class="contract-preview">
+                        <!-- Conteúdo gerado via JS -->
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="closeContractModal()">Fechar</button>
+                        <button class="btn btn-primary" onclick="saveContract()">
+                            <i class="fas fa-save"></i> Salvar Contrato
+                        </button>
+                        <button class="btn btn-primary" onclick="printContract()">
+                            <i class="fas fa-print"></i> Imprimir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+// Dados do sistema (simulando banco de dados)
+const systemData = {
+    company: {
+        name: "Z OUTDOOR LTDA",
+        cnpj: "12.345.678/0001-90",
+        owner: "Carlos Eduardo Mendes",
+        ownerCPF: "111.222.333-44",
+        address: "Rua das Palmeiras, 123 - Centro, Araraquara/SP",
+        pix: "12.345.678/0001-90",
+        bank: "Banco do Brasil - Ag 1234-5 / CC 12345-6"
+    },
+    outdoors: [
+        {
+            id: 1,
+            name: "Outdoor Centro - Av. Brasil",
+            location: "Av. Brasil, 1500 - Centro, Araraquara/SP",
+            status: "rented",
+            totalCotas: 20,
+            cotasDisponiveis: 5,
+            valorCota: 50,
+            rendaMensal: 350,
+            cotistas: [
+                { nome: "João da Silva", cotas: 4, cpf: "123.456.789-00" },
+                { nome: "Maria Santos", cotas: 10, cpf: "987.654.321-00" },
+                { nome: "Pedro Costa", cotas: 1, cpf: "456.789.123-00" }
+            ]
+        },
+        {
+            id: 2,
+            name: "Outdoor Shopping",
+            location: "Rodovia SP-340, Km 123 - Araraquara/SP",
+            status: "available",
+            totalCotas: 10,
+            cotasDisponiveis: 10,
+            valorCota: 50,
+            rendaMensal: 0,
+            cotistas: []
+        }
+    ],
+    investors: [
+        {
+            id: 1,
+            nome: "João da Silva",
+            cpf: "123.456.789-00",
+            email: "joao@email.com",
+            telefone: "(16) 99999-9999",
+            endereco: "Rua A, 123 - Araraquara/SP",
+            cotas: 4,
+            outdoor: 1,
+            dataInvestimento: "2026-02-27",
+            status: "active"
+        },
+        {
+            id: 2,
+            nome: "Maria Santos",
+            cpf: "987.654.321-00",
+            email: "maria@email.com",
+            telefone: "(16) 98888-8888",
+            endereco: "Av. B, 456 - Araraquara/SP",
+            cotas: 10,
+            outdoor: 1,
+            dataInvestimento: "2026-02-25",
+            status: "active"
+        }
+    ]
+};
+
+let currentUser = null;
+let currentContractData = null;
+
+// Login
+function switchLoginTab(type) {
+    document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.closest('.login-tab').classList.add('active');
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Simulação de autenticação
+    if (email.includes('admin') || email === '123.456.789-00') {
+        currentUser = {
+            type: email.includes('admin') ? 'admin' : 'investor',
+            name: email.includes('admin') ? 'Administrador' : 'João da Silva',
+            email: email
+        };
+        
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        
+        setupInterface();
+    } else {
+        alert('Credenciais inválidas. Use admin@zoutdoor.com / 123456 ou CPF 123.456.789-00 / 123456');
+    }
+}
+
+function setupInterface() {
+    if (currentUser.type === 'admin') {
+        document.getElementById('adminMenu').classList.remove('hidden');
+        document.getElementById('investorMenu').classList.add('hidden');
+        document.getElementById('userName').textContent = systemData.company.owner;
+        document.getElementById('userAvatar').textContent = systemData.company.owner.charAt(0);
+        showSection('dashboard');
+    } else {
+        document.getElementById('adminMenu').classList.add('hidden');
+        document.getElementById('investorMenu').classList.remove('hidden');
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userAvatar').textContent = currentUser.name.charAt(0);
+        document.getElementById('userRole').textContent = 'Investidor';
+        document.getElementById('pageTitle').textContent = 'Meu Painel';
+        showSection('invDashboard');
+    }
+}
+
+function logout() {
+    location.reload();
+}
+
+// Navegação
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Atualizar menu ativo
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.target.closest('.nav-link').classList.add('active');
+    
+    // Atualizar título
+    const titles = {
+        'dashboard': 'Dashboard Administrativo',
+        'outdoors': 'Gerenciar Outdoors',
+        'investors': 'Cadastro de Investidores',
+        'contracts': 'Gerenciamento de Contratos',
+        'config': 'Configurações',
+        'invDashboard': 'Meu Painel de Investimentos'
+    };
+    if (titles[sectionId]) {
+        document.getElementById('pageTitle').textContent = titles[sectionId];
+    }
+}
+
+// Cálculos
+function calculateInvestment() {
+    const cotas = document.getElementById('contractCotas').value;
+    const valor = cotas * 50;
+    document.getElementById('contractValue').value = `R$ ${valor.toFixed(2).replace('.', ',')}`;
+}
+
+function loadInvestorData() {
+    const investorId = document.getElementById('contractInvestor').value;
+    const investor = systemData.investors.find(i => i.id == investorId);
+    if (investor) {
+        document.getElementById('contractCotas').value = investor.cotas;
+        calculateInvestment();
+        document.getElementById('contractOutdoor').value = investor.outdoor;
+    }
+}
+
+// Geração de Contrato
+function generateContract(cpf) {
+    const investor = systemData.investors.find(i => i.cpf === cpf);
+    if (investor) {
+        document.getElementById('contractInvestor').value = investor.id;
+        loadInvestorData();
+        showSection('contracts');
+        // Atualizar menu ativo
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelector('[onclick="showSection(\'contracts\')"]').classList.add('active');
+    }
+}
+
+function previewContract() {
+    const investorId = document.getElementById('contractInvestor').value;
+    const outdoorId = document.getElementById('contractOutdoor').value;
+    const cotas = document.getElementById('contractCotas').value;
+    const data = document.getElementById('contractDate').value || new Date().toISOString().split('T')[0];
+    
+    if (!investorId) {
+        alert('Selecione um investidor');
+        return;
+    }
+    
+    const investor = systemData.investors.find(i => i.id == investorId);
+    const outdoor = systemData.outdoors.find(o => o.id == outdoorId);
+    
+    currentContractData = {
+        numero: `SCP-OUT-2026-${String(systemData.investors.length + 1).padStart(3, '0')}`,
+        data: new Date(data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }),
+        scotista: systemData.company,
+        participante: investor,
+        outdoor: outdoor,
+        cotas: cotas,
+        valorTotal: cotas * outdoor.valorCota,
+        percentual: (cotas / outdoor.totalCotas) * 100
+    };
+    
+    renderContract();
+    document.getElementById('contractModal').classList.add('active');
+}
+
+function renderContract() {
+    const d = currentContractData;
+    const content = `
+        <h1>CONTRATO DE SOCIEDADE EM CONTA DE PARTICIPAÇÃO (SCP)</h1>
+        <h2>OUTDOOR ${d.outdoor.name.toUpperCase()} - COTA DE INVESTIMENTO</h2>
+        
+        <p style="text-align: center; margin: 2rem 0;">
+            <strong>NÚMERO DO CONTRATO:</strong> <span class="contract-field" contenteditable="true">${d.numero}</span><br>
+            <strong>DATA:</strong> <span class="contract-field" contenteditable="true">${d.data}</span><br>
+            <strong>LOCAL:</strong> <span class="contract-field" contenteditable="true">Araraquara, Estado de São Paulo</span>
+        </p>
+
+        <h2>PARTES CONTRATANTES</h2>
+        
+        <p><strong>SCOTISTA (Empresário Principal):</strong></p>
+        <p>
+            <span class="contract-field" contenteditable="true">${d.scotista.owner}</span>, 
+            brasileiro, casado, empresário, portador do RG nº <span class="contract-field" contenteditable="true">12.345.678-9</span> 
+            e CPF nº <span class="contract-field" contenteditable="true">${d.scotista.ownerCPF}</span>, 
+            residente e domiciliado à <span class="contract-field" contenteditable="true">${d.scotista.address}</span>, 
+            na qualidade de titular da empresa <span class="contract-field" contenteditable="true">${d.scotista.name}</span>, 
+            inscrita no CNPJ sob o nº <span class="contract-field" contenteditable="true">${d.scotista.cnpj}</span>, 
+            com sede em Araraquara/SP, doravante denominado <strong>SCOTISTA</strong>.
+        </p>
+
+        <p><strong>PARTICIPANTE(S) (Investidor):</strong></p>
+        <p>
+            <span class="contract-field" contenteditable="true">${d.participante.nome}</span>, 
+            brasileiro(a), <span class="contract-field" contenteditable="true">solteiro(a)</span>, 
+            <span class="contract-field" contenteditable="true">profissional liberal</span>, 
+            portador(a) do CPF nº <span class="contract-field" contenteditable="true">${d.participante.cpf}</span>, 
+            residente e domiciliado(a) à <span class="contract-field" contenteditable="true">${d.participante.endereco}</span>, 
+            doravante denominado <strong>PARTICIPANTE</strong>.
+        </p>
+
+        <h2>CLÁUSULA PRIMEIRA - DO OBJETO E ESTRUTURA DO INVESTIMENTO</h2>
+        
+        <p><strong>1.1.</strong> O presente contrato tem por objeto a constituição de Sociedade em Conta de Participação (SCP), 
+        nos termos do artigo 1.031 e seguintes da Lei nº 10.406/2002 (Código Civil Brasileiro), 
+        para investimento em painéis de publicidade outdoor localizados em Araraquara/SP e região.</p>
+
+        <p><strong>1.2.</strong> O SCOTISTA declara ser proprietário/operador do painel de outdoor localizado em:</p>
+        <p style="margin-left: 2rem;">
+            <span class="contract-field" contenteditable="true">${d.outdoor.location}</span>
+        </p>
+
+        <p><strong>1.3.</strong> Estrutura do Investimento:</p>
+        <ul style="margin-left: 2rem; list-style: none;">
+            <li><strong>Valor Total do Investimento:</strong> R$ <span class="contract-field" contenteditable="true">${d.valorTotal.toFixed(2).replace('.', ',')}</span></li>
+            <li><strong>Número de Cotas:</strong> <span class="contract-field" contenteditable="true">${d.cotas}</span> cotas</li>
+            <li><strong>Valor Unitário por Cota:</strong> R$ 50,00 (cinquenta reais)</li>
+            <li><strong>Percentual de Participação:</strong> <span class="contract-field" contenteditable="true">${d.percentual.toFixed(1)}%</span> 
+            dos rendimentos mensais líquidos do outdoor.</li>
+        </ul>
+
+        <h2>CLÁUSULA SEGUNDA - DA NATUREZA JURÍDICA E RESPONSABILIDADE</h2>
+        
+        <p><strong>2.1.</strong> A presente SCP é uma sociedade de fato, sem personalidade jurídica própria, 
+        não podendo o PARTICIPANTE ser considerado sócio da empresa do SCOTISTA perante terceiros.</p>
+        
+        <p><strong>2.2.</strong> O SCOTISTA responde exclusivamente perante terceiros pelas obrigações sociais e tributárias do negócio, 
+        ficando o PARTICIPANTE isento de qualquer responsabilidade solidária ou subsidiária.</p>
+
+        <h2>CLÁUSULA TERCEIRA - DO APORTE E LIBERAÇÃO DAS COTAS</h2>
+        
+        <p><strong>3.1.</strong> O PARTICIPANTE compromete-se a realizar o aporte financeiro de 
+        <strong>R$ ${d.valorTotal.toFixed(2).replace('.', ',')}</strong> referente a <strong>${d.cotas} cotas</strong>.</p>
+
+        <p><strong>3.2.</strong> O pagamento deverá ser realizado mediante:</p>
+        <ul style="margin-left: 2rem;">
+            <li>PIX: <span class="contract-field" contenteditable="true">${d.scotista.pix}</span></li>
+            <li>Transferência bancária: <span class="contract-field" contenteditable="true">${d.scotista.bank}</span></li>
+        </ul>
+
+        <h2>CLÁUSULA QUARTA - DOS RENDIMENTOS</h2>
+        
+        <p><strong>4.1.</strong> Os rendimentos mensais serão calculados com base na receita líquida obtida com a locação do outdoor, 
+        deduzidas as despesas operacionais (impostos, manutenção, seguros e taxas administrativas limitadas a 15%).</p>
+        
+        <p><strong>4.2.</strong> O PARTICIPANTE terá direito a <strong>${d.percentual.toFixed(1)}%</strong> do rendimento líquido mensal, 
+        proporcional às suas ${d.cotas} cotas.</p>
+        
+        <p><strong>4.3.</strong> Estimativa de rendimento mensal: R$ <span class="contract-field" contenteditable="true">${((d.outdoor.rendaMensal * d.percentual / 100)).toFixed(2).replace('.', ',')}</span> 
+        (baseado na renda atual de R$ ${d.outdoor.rendaMensal.toFixed(2).replace('.', ',')}).</p>
+
+        <p><strong>4.4.</strong> O pagamento será realizado até o dia 10 (dez) do mês subsequente, 
+        mediante transferência para conta bancária indicada pelo PARTICIPANTE.</p>
+
+        <h2>CLÁUSULA QUINTA - PRAZO E VIGÊNCIA</h2>
+        
+        <p><strong>5.1.</strong> O presente contrato terá prazo de vigência de <strong>24 (vinte e quatro) meses</strong>, 
+        contados a partir da data de assinatura e confirmação do pagamento.</p>
+        
+        <p><strong>5.2.</strong> O PARTICIPANTE poderá solicitar resgate antecipado após 12 meses, 
+        mediante comunicação por escrito com 60 dias de antecedência.</p>
+
+        <h2>CLÁUSULA SEXTA - DISPOSIÇÕES GERAIS</h2>
+        
+        <p><strong>6.1.</strong> Este contrato constitui título executivo extrajudicial.</p>
+        
+        <p><strong>6.2.</strong> Fica eleito o foro da Comarca de Araraquara/SP para dirimir quaisquer dúvidas.</p>
+
+        <div style="margin-top: 4rem; text-align: center;">
+            <p>Araraquara, <span class="contract-field" contenteditable="true">${d.data}</span></p>
+        </div>
+
+        <div style="margin-top: 4rem; display: flex; justify-content: space-between;">
+            <div style="text-align: center; flex: 1;">
+                <div style="border-top: 1px solid #333; margin-top: 3rem; padding-top: 0.5rem;">
+                    <strong>SCOTISTA</strong><br>
+                    ${d.scotista.owner}<br>
+                    CPF: ${d.scotista.ownerCPF}
+                </div>
+            </div>
+            <div style="width: 4rem;"></div>
+            <div style="text-align: center; flex: 1;">
+                <div style="border-top: 1px solid #333; margin-top: 3rem; padding-top: 0.5rem;">
+                    <strong>PARTICIPANTE</strong><br>
+                    ${d.participante.nome}<br>
+                    CPF: ${d.participante.cpf}
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 4rem;">
+            <p><strong>TESTEMUNHAS:</strong></p>
+            <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 2rem;">
+                    <div style="border-top: 1px solid #333; margin-top: 3rem; padding-top: 0.5rem;">
+                        Nome: <span class="contract-field" contenteditable="true">_________________________________</span><br>
+                        CPF: <span class="contract-field" contenteditable="true">_________________________________</span>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div style="border-top: 1px solid #333; margin-top: 3rem; padding-top: 0.5rem;">
+                        Nome: <span class="contract-field" contenteditable="true">_________________________________</span><br>
+                        CPF: <span class="contract-field" contenteditable="true">_________________________________</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('contractContent').innerHTML = content;
+}
+
+function closeContractModal() {
+    document.getElementById('contractModal').classList.remove('active');
+}
+
+function saveContract() {
+    // Salvar no localStorage (simulação)
+    const contracts = JSON.parse(localStorage.getItem('contracts') || '[]');
+    contracts.push({
+        ...currentContractData,
+        content: document.getElementById('contractContent').innerHTML,
+        savedAt: new Date().toISOString()
+    });
+    localStorage.setItem('contracts', JSON.stringify(contracts));
+    alert('Contrato salvo com sucesso!');
+    closeContractModal();
+}
+
+function printContract() {
+    const printWindow = window.open('', '_blank');
+    const content = document.getElementById('contractContent').innerHTML;
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Contrato SCP - ${currentContractData.participante.nome}</title>
+            <style>
+                body { font-family: 'Times New Roman', serif; line-height: 1.8; padding: 2rem; max-width: 800px; margin: 0 auto; }
+                h1 { text-align: center; font-size: 1.2rem; margin-bottom: 2rem; text-transform: uppercase; }
+                h2 { font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: bold; }
+                p { margin-bottom: 0.5rem; text-align: justify; }
+                ul { margin-left: 2rem; }
+                .contract-field { font-weight: bold; color: #000; border-bottom: 1px solid #999; }
+                @media print { body { padding: 0; } }
+            </style>
+        </head>
+        <body>${content}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+}
+
+// Configurações
+function saveConfig() {
+    systemData.company = {
+        name: document.getElementById('configCompanyName').value,
+        cnpj: document.getElementById('configCNPJ').value,
+        owner: document.getElementById('configOwnerName').value,
+        ownerCPF: document.getElementById('configOwnerCPF').value,
+        address: document.getElementById('configAddress').value,
+        pix: document.getElementById('configPIX').value,
+        bank: document.getElementById('configBank').value
+    };
+    localStorage.setItem('systemData', JSON.stringify(systemData));
+    alert('Configurações salvas com sucesso!');
+}
+
+// Utilitários
+function openOutdoorModal() {
+    alert('Funcionalidade de adicionar outdoor será implementada aqui');
+}
+
+function editOutdoor(id) {
+    alert('Editar outdoor ' + id);
+}
+
+function viewOutdoor(id) {
+    alert('Visualizar detalhes do outdoor ' + id);
+}
+
+function openInvestorModal() {
+    alert('Funcionalidade de adicionar investidor será implementada aqui');
+}
+
+// Carregar dados salvos
+window.onload = function() {
+    const saved = localStorage.getItem('systemData');
+    if (saved) {
+        Object.assign(systemData, JSON.parse(saved));
+        // Atualizar campos de configuração
+        document.getElementById('configCompanyName').value = systemData.company.name;
+        document.getElementById('configCNPJ').value = systemData.company.cnpj;
+        document.getElementById('configOwnerName').value = systemData.company.owner;
+        document.getElementById('configOwnerCPF').value = systemData.company.ownerCPF;
+        document.getElementById('configAddress').value = systemData.company.address;
+        document.getElementById('configPIX').value = systemData.company.pix;
+        document.getElementById('configBank').value = systemData.company.bank;
+    }
+    
+    // Set data atual
+    document.getElementById('contractDate').value = new Date().toISOString().split('T')[0];
+};
+</script>
+
+</body>
+</html>
