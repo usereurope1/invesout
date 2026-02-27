@@ -144,7 +144,7 @@
 
         .results-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-top: 20px;
         }
@@ -160,10 +160,11 @@
         .result-box p {
             color: #555;
             margin-bottom: 10px;
+            font-size: 0.9em;
         }
 
         .result-value {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: bold;
             color: #28a745;
         }
@@ -289,10 +290,15 @@
             width: 60%;
         }
 
-        .annual-highlight {
-            font-size: 1.1em;
-            color: #555;
-            margin-top: 5px;
+        .resultado-final {
+            background: #e8f5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            border-left: 4px solid #4caf50;
+            font-size: 1.3em;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -301,9 +307,7 @@
         <div class="header">
             <h1>🚀 7 OUTDOOR</h1>
             <p>Oportunidade para investidores em Araraquara - SP</p>
-            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta 
-
-de Participação (SCP)</p>
+            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta de Participação (SCP)</p>
             <div class="local-badge">
                 📍 Araraquara
             </div>
@@ -336,203 +340,141 @@ de Participação (SCP)</p>
                 <div class="calculator">
                     <div class="calculator-item">
                         <label>Quantidade de Cotas:</label>
-                        <input type="number" id="quantidade-cotas" min="1" 
-
-max="100" value="10">
+                        <input type="number" id="quantidade-cotas" min="1" max="100" value="10">
                     </div>
                     
                     <div class="calculator-item">
                         <label>Valor do Investimento:</label>
-                        <input type="number" id="valor-investimento" min="50" 
-
-value="500" readonly style="background: #f0f0f0;">
+                        <input type="number" id="valor-investimento" min="50" value="500" readonly style="background: #f0f0f0;">
                     </div>
                 </div>
 
                 <div class="results-grid">
                     <div class="result-box">
-                        <p>📈 Rendimento Mensal</p>
-                        <div class="result-value" id="rendimento-mensal">R$ 
+                        <p>💰 Você recebe todo mês</p>
+                        <div class="result-value" id="rendimento-mensal">R$ 25,00</div>
+                    </div>
 
-25,00</div>
-                        <p style="font-size: 0.9em; color: #666;">*5% ao mês</p>
+                    <div class="result-box">
+                        <p>⏱️ Seu investimento volta em</p>
+                        <div class="result-value">12 meses</div>
                     </div>
 
                     <div class="result-box highlight">
-                        <p>📊 Rendimento Anual</p>
-                        <div class="result-value" id="rendimento-anual">R$ 
-
-300,00</div>
-                        <p style="font-size: 0.9em; color: rgba
-
-(255,255,255,0.9);">*60% ao ano</p>
+                        <p>🎯 Retorno total em 12 meses</p>
+                        <div class="result-value" id="retorno-anual">R$ 800,00</div>
                     </div>
                 </div>
 
-                <div class="info-box" style="margin-top: 20px; background: 
-
-#e8f4fd; border-left-color: #2196F3;">
-                    <p style="margin: 0; text-align: center; color: #1976D2;">
-                        <strong>💰 Retorno total em 20 meses!</strong> - Em menos 
-
-de 2 anos você recupera todo seu investimento
-                    </p>
+                <div class="resultado-final" id="resultado-final">
+                    R$ 500,00 + R$ 300,00 = R$ 800,00
                 </div>
 
-                <button class="btn" 
-
-onclick="window.location.href='https://wa.me/5516997892901?text=Tenho
-
-%20interesse%20em%20investir%20nas%20cotas%20da
-
-%207%20Outdoor'">
-                    💬 Tenho Interesse - Fale com um Consultor
+                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero%20investir%20na%207%20Outdoor'">
+                    💬 QUERO INVESTIR - Fale comigo no WhatsApp
                 </button>
             </div>
 
             <div class="info-box">
                 <h3>📋 Por que investir na 7 OUTDOOR?</h3>
                 <ul>
-                    <li>Empresa em franca expansão em Araraquara</li>
-                    <li>Demanda crescente por publicidade outdoor</li>
-                    <li>Investimento acessível a partir de R$ 50,00</li>
-                    <li><strong>Rendimento mensal de 5% (60% ao ano)
-
-</strong></li>
-                    <li>Modelo SCP - segurança jurídica para o investidor</li>
-                    <li>Gestão profissional e transparente</li>
-                    <li>Relatórios mensais de desempenho</li>
+                    <li>Empresa crescendo em Araraquara</li>
+                    <li>Demanda alta por outdoor</li>
+                    <li>Invista a partir de R$ 50,00</li>
+                    <li><strong>Em 12 meses: você recebe seu dinheiro de volta + 60% de lucro</strong></li>
+                    <li>Modelo seguro (SCP)</li>
+                    <li>Gestão profissional</li>
+                    <li>Relatórios todo mês</li>
                 </ul>
             </div>
 
             <div class="progress-bar">
-                <div class="progress-fill" id="progresso-vendas" style="width: 
-
-90%;"></div>
+                <div class="progress-fill" id="progresso-vendas" style="width: 90%;"></div>
             </div>
-            <p style="text-align: center; color: #666;">Garanta já seu 
-
-investimento</p>
+            <p style="text-align: center; color: #666;">Últimas cotas disponíveis</p>
         </div>
 
         <div class="footer">
             <p>📞 (16) 99789-2901</p>
-                   <p>📍 Araraquara - SP</p>
+            <p>📍 Araraquara - SP</p>
             <a href="https://wa.me/5516997892901" class="whatsapp-btn">
-                📱 Fale Conosco no WhatsApp
+                📱 Fale Comigo no WhatsApp
             </a>
             <p style="margin-top: 20px; font-size: 0.8em; opacity: 0.7;">
-                © 2024 7 OUTDOOR - Todos os direitos reservados
+                © 2026 7 OUTDOOR
             </p>
         </div>
     </div>
 
     <script>
-        // Configurações do investimento
+        // Configurações
         const config = {
             totalCotas: 1000,
             cotasVendidas: 900,
             valorCota: 50,
-            rendimentoMensal: 0.05, // 5% ao mês
+            rendimentoMensal: 0.05,
             totalInvestidores: 4
         };
 
-        // Elementos do DOM
-        const cotasDisponiveisEl = document.getElementById('cotas-
-
-disponiveis');
+        // Elementos
+        const cotasDisponiveisEl = document.getElementById('cotas-disponiveis');
         const valorCotaEl = document.getElementById('valor-cota');
         const investidoresEl = document.getElementById('investidores');
-        const quantidadeCotasInput = document.getElementById('quantidade-
+        const quantidadeCotasInput = document.getElementById('quantidade-cotas');
+        const valorInvestimentoInput = document.getElementById('valor-investimento');
+        const rendimentoMensalEl = document.getElementById('rendimento-mensal');
+        const retornoAnualEl = document.getElementById('retorno-anual');
+        const resultadoFinalEl = document.getElementById('resultado-final');
+        const progressoVendasEl = document.getElementById('progresso-vendas');
 
-cotas');
-        const valorInvestimentoInput = document.getElementById('valor-
-
-investimento');
-        const rendimentoMensalEl = document.getElementById('rendimento-
-
-mensal');
-        const rendimentoAnualEl = document.getElementById('rendimento-
-
-anual');
-        const progressoVendasEl = document.getElementById('progresso-
-
-vendas');
-
-        // Atualiza os valores iniciais
+        // Atualiza valores fixos
         function atualizarInterface() {
             const cotasDisponiveis = config.totalCotas - config.cotasVendidas;
-            cotasDisponiveisEl.textContent = cotasDisponiveis.toLocaleString();
+            cotasDisponiveisEl.textContent = cotasDisponiveis;
             valorCotaEl.textContent = `R$ ${config.valorCota.toFixed(2)}`;
             investidoresEl.textContent = config.totalInvestidores;
             
-            const percentualVendido = (config.cotasVendidas / config.totalCotas) 
-
-* 100;
+            const percentualVendido = (config.cotasVendidas / config.totalCotas) * 100;
             progressoVendasEl.style.width = `${percentualVendido}%`;
-            document.querySelector('.progress-bar + p').textContent = 
-                `${percentualVendido.toFixed(1)}% das cotas já comercializadas`;
         }
 
-        // Calcula rendimentos
-        function calcularRendimentos(quantidadeCotas) {
-            const investimento = quantidadeCotas * config.valorCota;
+        // Calcula os valores
+        function calcular(quantidade) {
+            const investimento = quantidade * config.valorCota;
             const rendimentoMensal = investimento * config.rendimentoMensal;
             const rendimentoAnual = rendimentoMensal * 12;
-            return { mensal: rendimentoMensal, anual: rendimentoAnual };
+            const retornoTotal = investimento + rendimentoAnual;
+            
+            return {
+                investimento,
+                rendimentoMensal,
+                rendimentoAnual,
+                retornoTotal
+            };
         }
 
-        // Atualiza quando muda quantidade de cotas
+        // Atualiza quando muda
         quantidadeCotasInput.addEventListener('input', function() {
-            let quantidade = parseInt(this.value) || 0;
+            let qtd = parseInt(this.value) || 1;
             const maxCotas = config.totalCotas - config.cotasVendidas;
             
-            // Validações
-            if (quantidade < 1) quantidade = 1;
-            if (quantidade > maxCotas) quantidade = maxCotas;
+            if (qtd < 1) qtd = 1;
+            if (qtd > maxCotas) qtd = maxCotas;
             
-            this.value = quantidade;
+            this.value = qtd;
             
-            const valorTotal = quantidade * config.valorCota;
-            valorInvestimentoInput.value = valorTotal.toFixed(2);
+            const valores = calcular(qtd);
             
-            const rendimentos = calcularRendimentos(quantidade);
-            rendimentoMensalEl.textContent = `R$ 
-
-${rendimentos.mensal.toFixed(2)}`;
-            rendimentoAnualEl.textContent = `R$ ${rendimentos.anual.toFixed
-
-(2)}`;
+            valorInvestimentoInput.value = valores.investimento.toFixed(2);
+            rendimentoMensalEl.textContent = `R$ ${valores.rendimentoMensal.toFixed(2)}`;
+            retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
+            
+            // Fórmula correta baseada nos valores reais
+            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ ${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
         });
 
-        // Atualiza quando muda valor do investimento
-        valorInvestimentoInput.addEventListener('input', function() {
-            let valor = parseFloat(this.value) || 0;
-            const maxCotas = config.totalCotas - config.cotasVendidas;
-            const maxValor = maxCotas * config.valorCota;
-            
-            // Validações
-            if (valor < config.valorCota) valor = config.valorCota;
-            if (valor > maxValor) valor = maxValor;
-            
-            this.value = valor.toFixed(2);
-            
-            const quantidade = Math.floor(valor / config.valorCota);
-            quantidadeCotasInput.value = quantidade;
-            
-            const rendimentos = calcularRendimentos(quantidade);
-            rendimentoMensalEl.textContent = `R$ 
-
-${rendimentos.mensal.toFixed(2)}`;
-            rendimentoAnualEl.textContent = `R$ ${rendimentos.anual.toFixed
-
-(2)}`;
-        });
-
-        // Inicializa a interface
+        // Inicializa
         atualizarInterface();
-        
-        // Dispara evento inicial para calcular valores padrão
         quantidadeCotasInput.dispatchEvent(new Event('input'));
     </script>
 </body>
