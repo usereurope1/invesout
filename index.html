@@ -331,10 +331,8 @@
         </div>
 
         <div class="content">
-            <!-- ÁREA DE EDIÇÃO RÁPIDA (instrução visível apenas para você, pode remover se quiser) 
-            <div class="config-note">
-                ⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável <code>config.cotasVendidas</code> no final do arquivo, dentro da tag <code>&lt;script&gt;</code>. Exemplo: <code>cotasVendidas: 920</code> (920 vendidas, 80 disponíveis). Atualize também <code>totalInvestidores</code> se necessário.
-            </div>-->
+            <!-- Instrução de edição comentada (pode descomentar se necessário) -->
+            <!-- <div class="config-note">⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável <code>config.cotasVendidas</code> no final do arquivo...</div> -->
 
             <div class="stats-container">
                 <div class="stat-card">
@@ -362,7 +360,8 @@
                 <div class="calculator">
                     <div class="calculator-item">
                         <label>Quantidade de Cotas:</label>
-                        <input type="number" id="quantidade-cotas" min="1" max="100" value="10">
+                        <!-- Agora o input permite 0 e aceita ser apagado para digitar novo número -->
+                        <input type="number" id="quantidade-cotas" min="0" max="100" value="10" inputmode="numeric" pattern="[0-9]*">
                     </div>
                     
                     <div class="calculator-item">
@@ -374,8 +373,7 @@
                 <div class="results-grid">
                     <div class="result-box">
                         <p>💰 Você recebe todo mês</p>
-                        <!-- O valor será preenchido via script como (retornoTotal / 12) -->
-                        <div class="result-value" id="rendimento-mensal">R$ 25,00</div>
+                        <div class="result-value" id="rendimento-mensal">R$ 66,67</div>
                     </div>
 
                     <div class="result-box">
@@ -411,7 +409,7 @@
             </div>
 
             <div class="progress-bar">
-                <div class="progress-fill" id="progresso-vendas" style="width: 90%;"></div>
+                <div class="progress-fill" id="progresso-vendas" style="width: 91.7%;"></div>
             </div>
             <p style="text-align: center; color: #666;"> Garanta já seu rendimento</p>
         </div>
@@ -434,7 +432,7 @@
         // ============================================================
         const config = {
             totalCotas: 1000,                // Total de cotas da oferta
-            cotasVendidas: 917,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
+            cotasVendidas: 921,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
             valorCota: 50,                     // Preço por cota (fixo)
             rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado em 12 meses)
             totalInvestidores: 4                // >>> ALTERE AQUI se o número de investidores mudar
@@ -464,44 +462,59 @@
             
             // Ajusta o max do input de quantidade para não ultrapassar disponíveis
             quantidadeCotasInput.max = cotasDisponiveis;
+            // Não forçamos mais o valor para 1 se estiver vazio ou 0, pois queremos permitir 0.
+            // Mas se o valor atual for maior que o máximo, ajustamos.
             if (parseInt(quantidadeCotasInput.value) > cotasDisponiveis) {
                 quantidadeCotasInput.value = cotasDisponiveis;
             }
         }
 
-        // Função de cálculo: retorna investimento, rendimento mensal (antigo 5%), rendimento anual e retorno total
+        // Função de cálculo: retorna investimento, recebimento mensal, rendimento anual e retorno total
         function calcular(quantidade) {
-            const investimento = quantidade * config.valorCota;
-            // O rendimento mensal nominal era 5% do investimento, mas o investidor recebe o montante em 12 meses.
-            // Conforme solicitado: "resultado em 12 meses / por 12" para exibir o valor mensal equivalente.
-            // O retorno total em 12 meses = investimento + (investimento * 0.05 * 12) = investimento * 1.6
-            const retornoTotal = investimento * 1.6;  // 100% + 60% = 160%
+            // Garantir que quantidade seja no mínimo 0 para os cálculos
+            const qtd = Math.max(0, quantidade);
+            const investimento = qtd * config.valorCota;
+            // O retorno total em 12 meses = investimento * 1.6 (100% + 60%)
+            const retornoTotal = investimento * 1.6;
             const rendimentoAnual = retornoTotal - investimento; // lucro total (60% do investimento)
-            // O valor a ser exibido como "você recebe todo mês" é o retornoTotal / 12 (parcela média mensal)
+            // Valor mensal a receber (média) = retornoTotal / 12
             const recebimentoMensal = retornoTotal / 12;
             
             return {
                 investimento,
-                recebimentoMensal,   // novo: retornoTotal/12
-                rendimentoAnual,      // lucro total (60%)
+                recebimentoMensal,
+                rendimentoAnual,
                 retornoTotal
             };
         }
 
         // Atualiza os valores na tela conforme a quantidade de cotas
         function atualizarSimulador() {
-            let qtd = parseInt(quantidadeCotasInput.value) || 1;
+            let qtd = parseInt(quantidadeCotasInput.value);
+            
+            // Se não for um número válido ou estiver vazio, consideramos 0 para não quebrar o cálculo
+            if (isNaN(qtd)) {
+                qtd = 0;
+            }
+            
             const maxCotas = config.totalCotas - config.cotasVendidas;
             
-            if (qtd < 1) qtd = 1;
-            if (qtd > maxCotas) qtd = maxCotas;
+            // Apenas limita ao máximo, não força mínimo 1
+            if (qtd > maxCotas) {
+                qtd = maxCotas;
+                quantidadeCotasInput.value = qtd;
+            }
             
-            quantidadeCotasInput.value = qtd;
+            // Permite 0 ou qualquer valor positivo
+            if (qtd < 0) {
+                qtd = 0;
+                quantidadeCotasInput.value = 0;
+            }
             
             const valores = calcular(qtd);
             
+            // Formata os valores com 2 casas decimais
             valorInvestimentoInput.value = valores.investimento.toFixed(2);
-            // Exibe o recebimento mensal como retornoTotal/12
             rendimentoMensalEl.textContent = `R$ ${valores.recebimentoMensal.toFixed(2)}`;
             retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
             
@@ -509,16 +522,46 @@
             resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ ${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
         }
 
-        // Evento de input
+        // Evento de input com tratamento especial para permitir campo vazio temporariamente
         quantidadeCotasInput.addEventListener('input', function() {
-            let qtd = parseInt(this.value) || 1;
+            let val = this.value;
+            
+            // Se estiver vazio, não atualiza ainda para não atrapalhar a digitação
+            if (val === '') {
+                // Opcional: pode limpar os campos ou manter último valor válido? 
+                // Por experiência do usuário, deixamos calcular com 0 momentaneamente para não travar.
+                // Mas podemos apenas ignorar e deixar o próximo evento tratar.
+                // Para simplificar, vamos calcular com 0 se vazio, mas sem alterar o input.
+                atualizarSimulador(); // Isso usará o valor atual (vazio -> isNaN -> 0)
+                return;
+            }
+            
+            let qtd = parseInt(val);
+            if (isNaN(qtd)) qtd = 0;
+            
             const maxCotas = config.totalCotas - config.cotasVendidas;
             
-            if (qtd < 1) qtd = 1;
-            if (qtd > maxCotas) qtd = maxCotas;
+            // Aplica limite superior
+            if (qtd > maxCotas) {
+                qtd = maxCotas;
+                this.value = qtd;
+            }
             
-            this.value = qtd;
+            // Não forçamos mínimo 1, então valores negativos viram 0
+            if (qtd < 0) {
+                qtd = 0;
+                this.value = 0;
+            }
+            
             atualizarSimulador();
+        });
+
+        // Também tratamos o blur para garantir que o campo não fique vazio ao sair
+        quantidadeCotasInput.addEventListener('blur', function() {
+            if (this.value === '') {
+                this.value = 0;
+                atualizarSimulador();
+            }
         });
 
         // Inicializa tudo
