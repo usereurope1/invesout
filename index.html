@@ -300,6 +300,22 @@
             font-size: 1.3em;
             font-weight: bold;
         }
+        /* Dica visual para edição */
+        .config-note {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+        .config-note code {
+            background: #ffeba0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -314,6 +330,17 @@
         </div>
 
         <div class="content">
+            <!-- ÁREA DE EDIÇÃO RÁPIDA (instrução visível apenas para você, pode remover se quiser) 
+            <div class="config-note">
+                ⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável 
+
+<code>config.cotasVendidas</code> no final do arquivo, dentro da tag <code>&lt;script&gt;</code>. 
+
+Exemplo: <code>cotasVendidas: 920</code> (920 vendidas, 80 disponíveis). Atualize também 
+
+<code>totalInvestidores</code> se necessário.
+            </div>-->
+
             <div class="stats-container">
                 <div class="stat-card">
                     <h3>Cotas Disponíveis</h3>
@@ -354,6 +381,7 @@ style="background: #f0f0f0;">
                 <div class="results-grid">
                     <div class="result-box">
                         <p>💰 Você recebe todo mês</p>
+                        <!-- O valor será preenchido via script como (retornoTotal / 12) -->
                         <div class="result-value" id="rendimento-mensal">R$ 25,00</div>
                     </div>
 
@@ -410,16 +438,21 @@ style="background: #f0f0f0;">
     </div>
 
     <script>
-        // Configurações
+        // ============================================================
+        // ÁREA DE CONFIGURAÇÃO - ALTERE AQUI AS COTAS DISPONÍVEIS
+        // ============================================================
         const config = {
-            totalCotas: 1000,
-            cotasVendidas: 900,
-            valorCota: 50,
-            rendimentoMensal: 0.05,
-            totalInvestidores: 4
-        };
+            totalCotas: 1000,                // Total de cotas da oferta
+            cotasVendidas: 917,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
+            valorCota: 50,                     // Preço por cota (fixo)
+            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado 
 
-        // Elementos
+em 12 meses)
+            totalInvestidores: 4                // >>> ALTERE AQUI se o número de investidores mudar
+        };
+        // ============================================================
+
+        // Elementos do DOM
         const cotasDisponiveisEl = document.getElementById('cotas-disponiveis');
         const valorCotaEl = document.getElementById('valor-cota');
         const investidoresEl = document.getElementById('investidores');
@@ -430,7 +463,7 @@ style="background: #f0f0f0;">
         const resultadoFinalEl = document.getElementById('resultado-final');
         const progressoVendasEl = document.getElementById('progresso-vendas');
 
-        // Atualiza valores fixos
+        // Atualiza os cards fixos e a barra de progresso
         function atualizarInterface() {
             const cotasDisponiveis = config.totalCotas - config.cotasVendidas;
             cotasDisponiveisEl.textContent = cotasDisponiveis;
@@ -439,24 +472,61 @@ style="background: #f0f0f0;">
             
             const percentualVendido = (config.cotasVendidas / config.totalCotas) * 100;
             progressoVendasEl.style.width = `${percentualVendido}%`;
+            
+            // Ajusta o max do input de quantidade para não ultrapassar disponíveis
+            quantidadeCotasInput.max = cotasDisponiveis;
+            if (parseInt(quantidadeCotasInput.value) > cotasDisponiveis) {
+                quantidadeCotasInput.value = cotasDisponiveis;
+            }
         }
 
-        // Calcula os valores
+        // Função de cálculo: retorna investimento, rendimento mensal (antigo 5%), rendimento anual e retorno 
+
+total
         function calcular(quantidade) {
             const investimento = quantidade * config.valorCota;
-            const rendimentoMensal = investimento * config.rendimentoMensal;
-            const rendimentoAnual = rendimentoMensal * 12;
-            const retornoTotal = investimento + rendimentoAnual;
+            // O rendimento mensal nominal era 5% do investimento, mas o investidor recebe o montante em 12 
+
+meses.
+            // Conforme solicitado: "resultado em 12 meses / por 12" para exibir o valor mensal equivalente.
+            // O retorno total em 12 meses = investimento + (investimento * 0.05 * 12) = investimento * 1.6
+            const retornoTotal = investimento * 1.6;  // 100% + 60% = 160%
+            const rendimentoAnual = retornoTotal - investimento; // lucro total (60% do investimento)
+            // O valor a ser exibido como "você recebe todo mês" é o retornoTotal / 12 (parcela média mensal)
+            const recebimentoMensal = retornoTotal / 12;
             
             return {
                 investimento,
-                rendimentoMensal,
-                rendimentoAnual,
+                recebimentoMensal,   // novo: retornoTotal/12
+                rendimentoAnual,      // lucro total (60%)
                 retornoTotal
             };
         }
 
-        // Atualiza quando muda
+        // Atualiza os valores na tela conforme a quantidade de cotas
+        function atualizarSimulador() {
+            let qtd = parseInt(quantidadeCotasInput.value) || 1;
+            const maxCotas = config.totalCotas - config.cotasVendidas;
+            
+            if (qtd < 1) qtd = 1;
+            if (qtd > maxCotas) qtd = maxCotas;
+            
+            quantidadeCotasInput.value = qtd;
+            
+            const valores = calcular(qtd);
+            
+            valorInvestimentoInput.value = valores.investimento.toFixed(2);
+            // Exibe o recebimento mensal como retornoTotal/12
+            rendimentoMensalEl.textContent = `R$ ${valores.recebimentoMensal.toFixed(2)}`;
+            retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
+            
+            // Fórmula no rodapé: investimento + lucro = total
+            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ 
+
+${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
+        }
+
+        // Evento de input
         quantidadeCotasInput.addEventListener('input', function() {
             let qtd = parseInt(this.value) || 1;
             const maxCotas = config.totalCotas - config.cotasVendidas;
@@ -465,22 +535,12 @@ style="background: #f0f0f0;">
             if (qtd > maxCotas) qtd = maxCotas;
             
             this.value = qtd;
-            
-            const valores = calcular(qtd);
-            
-            valorInvestimentoInput.value = valores.investimento.toFixed(2);
-            rendimentoMensalEl.textContent = `R$ ${valores.rendimentoMensal.toFixed(2)}`;
-            retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
-            
-            // Fórmula correta baseada nos valores reais
-            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ 
-
-${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
+            atualizarSimulador();
         });
 
-        // Inicializa
+        // Inicializa tudo
         atualizarInterface();
-        quantidadeCotasInput.dispatchEvent(new Event('input'));
+        atualizarSimulador();
     </script>
 </body>
 </html>
