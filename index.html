@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -332,13 +333,7 @@
         <div class="content">
             <!-- ÁREA DE EDIÇÃO RÁPIDA (instrução visível apenas para você, pode remover se quiser) 
             <div class="config-note">
-                ⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável 
-
-<code>config.cotasVendidas</code> no final do arquivo, dentro da tag <code>&lt;script&gt;</code>. 
-
-Exemplo: <code>cotasVendidas: 920</code> (920 vendidas, 80 disponíveis). Atualize também 
-
-<code>totalInvestidores</code> se necessário.
+                ⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável <code>config.cotasVendidas</code> no final do arquivo, dentro da tag <code>&lt;script&gt;</code>. Exemplo: <code>cotasVendidas: 920</code> (920 vendidas, 80 disponíveis). Atualize também <code>totalInvestidores</code> se necessário.
             </div>-->
 
             <div class="stats-container">
@@ -372,9 +367,7 @@ Exemplo: <code>cotasVendidas: 920</code> (920 vendidas, 80 disponíveis). Atuali
                     
                     <div class="calculator-item">
                         <label>Valor do Investimento:</label>
-                        <input type="number" id="valor-investimento" min="50" value="500" readonly 
-
-style="background: #f0f0f0;">
+                        <input type="number" id="valor-investimento" min="50" value="500" readonly style="background: #f0f0f0;">
                     </div>
                 </div>
 
@@ -400,9 +393,7 @@ style="background: #f0f0f0;">
                     R$ 500,00 + R$ 300,00 = R$ 800,00
                 </div>
 
-                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero
-
-%20investir%20na%207%20Outdoor'">
+                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero%20investir%20na%207%20Outdoor'">
                     💬 QUERO INVESTIR - Fale comigo no WhatsApp
                 </button>
             </div>
@@ -445,9 +436,7 @@ style="background: #f0f0f0;">
             totalCotas: 1000,                // Total de cotas da oferta
             cotasVendidas: 917,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
             valorCota: 50,                     // Preço por cota (fixo)
-            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado 
-
-em 12 meses)
+            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado em 12 meses)
             totalInvestidores: 4                // >>> ALTERE AQUI se o número de investidores mudar
         };
         // ============================================================
@@ -480,14 +469,10 @@ em 12 meses)
             }
         }
 
-        // Função de cálculo: retorna investimento, rendimento mensal (antigo 5%), rendimento anual e retorno 
-
-total
+        // Função de cálculo: retorna investimento, rendimento mensal (antigo 5%), rendimento anual e retorno total
         function calcular(quantidade) {
             const investimento = quantidade * config.valorCota;
-            // O rendimento mensal nominal era 5% do investimento, mas o investidor recebe o montante em 12 
-
-meses.
+            // O rendimento mensal nominal era 5% do investimento, mas o investidor recebe o montante em 12 meses.
             // Conforme solicitado: "resultado em 12 meses / por 12" para exibir o valor mensal equivalente.
             // O retorno total em 12 meses = investimento + (investimento * 0.05 * 12) = investimento * 1.6
             const retornoTotal = investimento * 1.6;  // 100% + 60% = 160%
@@ -521,9 +506,7 @@ meses.
             retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
             
             // Fórmula no rodapé: investimento + lucro = total
-            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ 
-
-${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
+            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ ${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
         }
 
         // Evento de input
