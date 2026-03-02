@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -26,6 +25,36 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+        }
+
+        .top-bar {
+            background: #333;
+            padding: 15px 40px;
+            text-align: right;
+            border-bottom: 2px solid #764ba2;
+        }
+
+        .site-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .site-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            border-color: white;
+        }
+
+        .site-btn i {
+            margin-right: 8px;
         }
 
         .header {
@@ -273,6 +302,11 @@
             .content {
                 padding: 20px;
             }
+
+            .top-bar {
+                text-align: center;
+                padding: 15px 20px;
+            }
         }
 
         .progress-bar {
@@ -321,10 +355,19 @@
 </head>
 <body>
     <div class="container">
+        <!-- Top bar com botão para o site -->
+        <div class="top-bar">
+            <a href="https://www.7outdoor.shop" target="_blank" class="site-btn">
+                🌐 ver site da 7 Outdoor
+            </a>
+        </div>
+
         <div class="header">
             <h1>🚀 7 OUTDOOR</h1>
             <p>Oportunidade para investidores em Araraquara - SP </p>
-            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta de Participação (SCP) (oferta privada)</p>
+            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta de Participação (SCP) (oferta 
+
+privada)</p>
             <div class="local-badge">
                 📍 Araraquara
             </div>
@@ -332,7 +375,9 @@
 
         <div class="content">
             <!-- Instrução de edição comentada (pode descomentar se necessário) -->
-            <!-- <div class="config-note">⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável <code>config.cotasVendidas</code> no final do arquivo...</div> -->
+            <!-- <div class="config-note">⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável 
+
+<code>config.cotasVendidas</code> no final do arquivo...</div> -->
 
             <div class="stats-container">
                 <div class="stat-card">
@@ -350,7 +395,7 @@
                 <div class="stat-card">
                     <h3>Investidores Atuais</h3>
                     <div class="stat-value" id="investidores">4</div>
-                    <div class="stat-label">sócios na empresa</div>
+                   
                 </div>
             </div>
 
@@ -361,12 +406,16 @@
                     <div class="calculator-item">
                         <label>Quantidade de Cotas:</label>
                         <!-- Agora o input permite 0 e aceita ser apagado para digitar novo número -->
-                        <input type="number" id="quantidade-cotas" min="0" max="100" value="10" inputmode="numeric" pattern="[0-9]*">
+                        <input type="number" id="quantidade-cotas" min="0" max="100" value="10" 
+
+inputmode="numeric" pattern="[0-9]*">
                     </div>
                     
                     <div class="calculator-item">
                         <label>Valor do Investimento:</label>
-                        <input type="number" id="valor-investimento" min="50" value="500" readonly style="background: #f0f0f0;">
+                        <input type="number" id="valor-investimento" min="50" value="500" readonly 
+
+style="background: #f0f0f0;">
                     </div>
                 </div>
 
@@ -391,7 +440,9 @@
                   Retorno previsto ao ano  R$ 500,00 + R$ 300,00 = R$ 800,00
                 </div>
 
-                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero%20investir%20na%207%20Outdoor'">
+                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero
+
+%20investir%20na%207%20Outdoor'">
                     💬 QUERO INVESTIR - Fale comigo no WhatsApp
                 </button>
             </div>
@@ -434,7 +485,9 @@
             totalCotas: 100,                // Total de cotas da oferta
             cotasVendidas: 37,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
             valorCota: 50,                     // Preço por cota (fixo)
-            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado em 12 meses)
+            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado 
+
+em 12 meses)
             totalInvestidores: 6                // >>> ALTERE AQUI se o número de investidores mudar
         };
         // ============================================================
@@ -519,7 +572,9 @@
             retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
             
             // Fórmula no rodapé: investimento + lucro = total
-            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ ${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
+            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ 
+
+${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
         }
 
         // Evento de input com tratamento especial para permitir campo vazio temporariamente
