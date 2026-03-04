@@ -227,6 +227,17 @@
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
         .info-box {
             background: white;
             border-radius: 10px;
@@ -336,21 +347,48 @@
             font-size: 1.3em;
             font-weight: bold;
         }
-        /* Dica visual para edição */
-        .config-note {
-            background: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.95em;
-            text-align: left;
+
+        /* Aviso de investimentos encerrados */
+        .sold-out-alert {
+            background: linear-gradient(135deg, #ff6b6b, #c92a2a);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 3px solid #fff3cd;
+            box-shadow: 0 10px 30px rgba(201, 42, 42, 0.3);
         }
-        .config-note code {
-            background: #ffeba0;
-            padding: 2px 6px;
-            border-radius: 4px;
+
+        .sold-out-alert h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .sold-out-alert p {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        .sold-out-alert .next-round {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.2em;
+            border: 2px dashed white;
+        }
+
+        .disabled-input {
+            background: #f0f0f0 !important;
+            color: #999;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -365,25 +403,28 @@
 
         <div class="header">
             <h1>🚀 7 OUTDOOR</h1>
-            <p>Oportunidade para investidores em Araraquara - SP </p>
-            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta de Participação (SCP) (oferta 
-
-privada)</p>
+            <p>Oportunidade para investidores em Araraquara - SP</p>
+            <p style="font-size: 1.1em; margin-top: 10px;">Sociedade em Conta de Participação (SCP) (oferta privada)</p>
             <div class="local-badge">
                 📍 Araraquara
             </div>
         </div>
 
         <div class="content">
-            <!-- Instrução de edição comentada (pode descomentar se necessário) -->
-            <!-- <div class="config-note">⚙️ <strong>Para ajustar as cotas disponíveis:</strong> edite a variável 
-
-<code>config.cotasVendidas</code> no final do arquivo...</div> -->
+            <!-- AVISO DE INVESTIMENTOS ENCERRADOS -->
+            <div class="sold-out-alert">
+                <h3>⚠️ INVESTIMENTOS ENCERRADOS</h3>
+                <p>Todas as 100 cotas desta rodada foram vendidas com sucesso!</p>
+                <p>Agradecemos a todos os investidores que participaram.</p>
+                <div class="next-round">
+                    🚀 Aguarde a próxima rodada de investimentos
+                </div>
+            </div>
 
             <div class="stats-container">
                 <div class="stat-card">
                     <h3>Cotas Disponíveis</h3>
-                    <div class="stat-value" id="cotas-disponiveis">63</div>
+                    <div class="stat-value" id="cotas-disponiveis">0</div>
                     <div class="stat-label">de 100 totais</div>
                 </div>
                 
@@ -395,7 +436,7 @@ privada)</p>
                 
                 <div class="stat-card">
                     <h3>Investidores Atuais</h3>
-                    <div class="stat-value" id="investidores">4</div>
+                    <div class="stat-value" id="investidores">6</div>
                    
                 </div>
             </div>
@@ -406,24 +447,20 @@ privada)</p>
                 <div class="calculator">
                     <div class="calculator-item">
                         <label>Quantidade de Cotas:</label>
-                        <!-- Agora o input permite 0 e aceita ser apagado para digitar novo número -->
-                        <input type="number" id="quantidade-cotas" min="0" max="100" value="10" 
-
-inputmode="numeric" pattern="[0-9]*">
+                        <!-- Input desabilitado pois não há cotas disponíveis -->
+                        <input type="number" id="quantidade-cotas" min="0" max="0" value="0" disabled class="disabled-input">
                     </div>
                     
                     <div class="calculator-item">
                         <label>Valor do Investimento:</label>
-                        <input type="number" id="valor-investimento" min="50" value="500" readonly 
-
-style="background: #f0f0f0;">
+                        <input type="number" id="valor-investimento" value="0" readonly style="background: #f0f0f0;">
                     </div>
                 </div>
 
                 <div class="results-grid">
                     <div class="result-box">
                         <p>💰 Você recebe todo mês</p>
-                        <div class="result-value" id="rendimento-mensal">R$ 66,67</div>
+                        <div class="result-value" id="rendimento-mensal">R$ 0,00</div>
                     </div>
 
                     <div class="result-box">
@@ -433,19 +470,20 @@ style="background: #f0f0f0;">
 
                     <div class="result-box highlight">
                         <p>🎯 Retorno total em 12 meses</p>
-                        <div class="result-value" id="retorno-anual">R$ 800,00</div>
+                        <div class="result-value" id="retorno-anual">R$ 0,00</div>
                     </div>
                 </div>
 
                 <div class="resultado-final" id="resultado-final">
-                  Retorno previsto ao ano  R$ 500,00 + R$ 300,00 = R$ 800,00
+                  Retorno previsto ao ano R$ 0,00 + R$ 0,00 = R$ 0,00
                 </div>
 
-                <button class="btn" onclick="window.location.href='https://wa.me/5516997892901?text=Quero
-
-%20investir%20na%207%20Outdoor'">
-                    💬 QUERO INVESTIR - Fale comigo no WhatsApp
+                <button class="btn" disabled style="background: #ccc;">
+                    ⚠️ COTAS ESGOTADAS - Aguarde nova rodada
                 </button>
+                <p style="text-align: center; margin-top: 10px; color: #c92a2a; font-weight: 600;">
+                    Esta rodada de investimentos foi encerrada com sucesso!
+                </p>
             </div>
 
             <div class="info-box">
@@ -461,9 +499,9 @@ style="background: #f0f0f0;">
             </div>
 
             <div class="progress-bar">
-                <div class="progress-fill" id="progresso-vendas" style="width: 91.7%;"></div>
+                <div class="progress-fill" id="progresso-vendas" style="width: 100%;"></div>
             </div>
-            <p style="text-align: center; color: #666;"> Garanta já seu rendimento</p>
+            <p style="text-align: center; color: #666; font-weight: 600;">🎉 Todas as cotas foram vendidas! Obrigado pela confiança!</p>
         </div>
 
         <div class="footer">
@@ -480,16 +518,14 @@ style="background: #f0f0f0;">
 
     <script>
         // ============================================================
-        // ÁREA DE CONFIGURAÇÃO - ALTERE AQUI AS COTAS DISPONÍVEIS
+        // ÁREA DE CONFIGURAÇÃO - TODAS AS COTAS VENDIDAS
         // ============================================================
         const config = {
             totalCotas: 100,                // Total de cotas da oferta
-            cotasVendidas: 37,               // >>> ALTERE AQUI: quantidade já vendida (ex: 920, 850, etc.)
+            cotasVendidas: 100,               // >>> 100 COTAS VENDIDAS - INVESTIMENTOS ENCERRADOS
             valorCota: 50,                     // Preço por cota (fixo)
-            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento (mas o pagamento é acumulado 
-
-em 12 meses)
-            totalInvestidores: 4                // >>> ALTERE AQUI se o número de investidores mudar
+            rendimentoMensal: 0.05,            // 5% ao mês sobre o investimento
+            totalInvestidores: 6                // >>> ALTERADO PARA 6 INVESTIDORES
         };
         // ============================================================
 
@@ -514,13 +550,9 @@ em 12 meses)
             const percentualVendido = (config.cotasVendidas / config.totalCotas) * 100;
             progressoVendasEl.style.width = `${percentualVendido}%`;
             
-            // Ajusta o max do input de quantidade para não ultrapassar disponíveis
+            // Ajusta o max do input de quantidade - como está 0, fica desabilitado
             quantidadeCotasInput.max = cotasDisponiveis;
-            // Não forçamos mais o valor para 1 se estiver vazio ou 0, pois queremos permitir 0.
-            // Mas se o valor atual for maior que o máximo, ajustamos.
-            if (parseInt(quantidadeCotasInput.value) > cotasDisponiveis) {
-                quantidadeCotasInput.value = cotasDisponiveis;
-            }
+            quantidadeCotasInput.value = 0;
         }
 
         // Função de cálculo: retorna investimento, recebimento mensal, rendimento anual e retorno total
@@ -544,28 +576,8 @@ em 12 meses)
 
         // Atualiza os valores na tela conforme a quantidade de cotas
         function atualizarSimulador() {
-            let qtd = parseInt(quantidadeCotasInput.value);
-            
-            // Se não for um número válido ou estiver vazio, consideramos 0 para não quebrar o cálculo
-            if (isNaN(qtd)) {
-                qtd = 0;
-            }
-            
-            const maxCotas = config.totalCotas - config.cotasVendidas;
-            
-            // Apenas limita ao máximo, não força mínimo 1
-            if (qtd > maxCotas) {
-                qtd = maxCotas;
-                quantidadeCotasInput.value = qtd;
-            }
-            
-            // Permite 0 ou qualquer valor positivo
-            if (qtd < 0) {
-                qtd = 0;
-                quantidadeCotasInput.value = 0;
-            }
-            
-            const valores = calcular(qtd);
+            // Com cotas esgotadas, sempre mostra 0
+            const valores = calcular(0);
             
             // Formata os valores com 2 casas decimais
             valorInvestimentoInput.value = valores.investimento.toFixed(2);
@@ -573,51 +585,16 @@ em 12 meses)
             retornoAnualEl.textContent = `R$ ${valores.retornoTotal.toFixed(2)}`;
             
             // Fórmula no rodapé: investimento + lucro = total
-            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ 
-
-${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
+            resultadoFinalEl.innerHTML = `R$ ${valores.investimento.toFixed(2)} + R$ ${valores.rendimentoAnual.toFixed(2)} = R$ ${valores.retornoTotal.toFixed(2)}`;
         }
 
-        // Evento de input com tratamento especial para permitir campo vazio temporariamente
+        // Event listeners desabilitados pois input está disabled
         quantidadeCotasInput.addEventListener('input', function() {
-            let val = this.value;
-            
-            // Se estiver vazio, não atualiza ainda para não atrapalhar a digitação
-            if (val === '') {
-                // Opcional: pode limpar os campos ou manter último valor válido? 
-                // Por experiência do usuário, deixamos calcular com 0 momentaneamente para não travar.
-                // Mas podemos apenas ignorar e deixar o próximo evento tratar.
-                // Para simplificar, vamos calcular com 0 se vazio, mas sem alterar o input.
-                atualizarSimulador(); // Isso usará o valor atual (vazio -> isNaN -> 0)
-                return;
-            }
-            
-            let qtd = parseInt(val);
-            if (isNaN(qtd)) qtd = 0;
-            
-            const maxCotas = config.totalCotas - config.cotasVendidas;
-            
-            // Aplica limite superior
-            if (qtd > maxCotas) {
-                qtd = maxCotas;
-                this.value = qtd;
-            }
-            
-            // Não forçamos mínimo 1, então valores negativos viram 0
-            if (qtd < 0) {
-                qtd = 0;
-                this.value = 0;
-            }
-            
-            atualizarSimulador();
+            // Não faz nada - input desabilitado
         });
 
-        // Também tratamos o blur para garantir que o campo não fique vazio ao sair
         quantidadeCotasInput.addEventListener('blur', function() {
-            if (this.value === '') {
-                this.value = 0;
-                atualizarSimulador();
-            }
+            // Não faz nada - input desabilitado
         });
 
         // Inicializa tudo
